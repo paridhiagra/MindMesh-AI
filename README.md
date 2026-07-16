@@ -32,27 +32,17 @@ Every decision and status update flows through **Slack**, making the entire loop
 
 ## 🏗️ Architecture
 
-<div align="center">
+```mermaid
+flowchart TD
+    CI["🔄 GitHub Actions CI"] -- "status" --> H["🧭 Hermes<br/>(Orchestrator)"]
+    H -- "instructions" --> OC["🛠️ OpenClaw<br/>(Builder)"]
+    OC -- "results" --> H
+    OC --> SLACK["💬 Slack<br/>(#agent-main)"]
 
-```
-             ┌────────────────────┐
-             │  GitHub Actions CI │
-             └─────────┬──────────┘
-                        │ status
-                        ▼
-                 ┌─────────────┐
-                 │   Hermes    │◄──────────┐
-                 │(Orchestrator│            │ results
-                 └──────┬──────┘            │
-                        │ instructions      │
-                        ▼                   │
-                 ┌─────────────┐            │
-                 │  OpenClaw   │────────────┘
-                 │  (Builder)  │
-                 └─────────────┘
-                        │
-                        ▼
-              💬 Slack (#agent-main)
+    style CI fill:#1f2937,stroke:#60a5fa,stroke-width:2px,color:#fff
+    style H fill:#1f2937,stroke:#f59e0b,stroke-width:2px,color:#fff
+    style OC fill:#1f2937,stroke:#34d399,stroke-width:2px,color:#fff
+    style SLACK fill:#1f2937,stroke:#a78bfa,stroke-width:2px,color:#fff
 ```
 
 </div>

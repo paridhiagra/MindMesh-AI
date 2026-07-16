@@ -68,11 +68,37 @@ flowchart TD
 | Language | Python |
 | CI/CD | GitHub Actions |
 | Messaging | Slack SDK |
-| AI Engine | Anthropic API |
+| AI Engine | Groq (GPT-OSS 120B) + Ollama (Qwen2.5-Coder 7B) |
 | Config | JSON + `.env` |
 | Testing | Pytest |
 
 </div>
+
+## 🧠 Model Routing
+
+Following the "expensive brain, cheap hands" pattern — a strong model plans, a fast/cheap model executes.
+
+| Task | Agent | Model | Provider | Why |
+|:--|:--|:--|:--|:--|
+| Planning & task decomposition | Hermes (Orchestrator) | GPT-OSS 120B | Groq (cloud API) | Strong reasoning for breaking down tasks correctly the first time |
+| Code execution & writing | OpenClaw (Builder) | Qwen2.5-Coder 7B | Ollama (local) | Runs fully offline, unlimited free usage, ideal for high-volume coding tasks |
+
+This keeps cost at zero while maximizing plan quality: Groq's cloud model handles the rare, high-stakes orchestration calls, while the local Ollama model handles the repetitive execution work with no API limits.
+
+---
+
+## ♻️ Self-Improvement Loop
+
+MindMesh AI doesn't just execute tasks once and stop — it closes the loop:
+
+1. **Detect** — CI run fails or OpenClaw reports an error
+2. **Diagnose** — Hermes reads the failure log and classifies the error type
+3. **Fix** — Hermes issues a targeted instruction to OpenClaw based on the diagnosis
+4. **Learn** — if the same error pattern reappears, Hermes reuses the fix instead of re-diagnosing from scratch, and logs it to `docs/decisions.md`
+
+This means the system gets faster and more reliable across a session — the second time it hits a known failure, it doesn't need a human in the loop.
+
+---
 
 ---
 

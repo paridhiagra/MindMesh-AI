@@ -1,104 +1,136 @@
+<div align="center">
+
 # 🧠 MindMesh AI
 
-A self-healing, dual-agent AI system where **Hermes** orchestrates and **OpenClaw** builds — connected through Slack, healing itself when things break.
+### *A self-healing, dual-agent AI system*
 
-![Status](https://img.shields.io/badge/status-in--development-yellow)
-![CI](https://github.com/paridhiagra/MindMesh-AI/actions/workflows/ci.yml/badge.svg)
+Hermes orchestrates. OpenClaw builds. Slack watches. Together, they heal what breaks.
+
+![Status](https://img.shields.io/badge/status-in--development-orange?style=for-the-badge)
+![CI](https://img.shields.io/github/actions/workflow/status/paridhiagra/MindMesh-AI/ci.yml?style=for-the-badge&label=CI)
+![Python](https://img.shields.io/badge/python-3.11-blue?style=for-the-badge&logo=python)
+![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
+
+</div>
 
 ---
 
 ## 🌌 Overview
 
-MindMesh AI is an experimental **self-healing multi-agent system** built to automate the full development loop — from detecting a broken build to diagnosing the issue and fixing it, with minimal human intervention.
+**MindMesh AI** is an experimental self-healing multi-agent system that automates the full development loop — detect a broken build, diagnose the issue, fix it, and verify — with minimal human intervention.
 
-Two agents work together:
+Two agents work in tandem:
 
-| Agent | Role |
-|-------|------|
-| **Hermes** | The orchestrator — monitors CI/CD, detects failures, reads logs, and issues instructions |
-| **OpenClaw** | The builder — receives instructions from Hermes and writes/fixes code accordingly |
+| Agent | Role | Responsibility |
+|:--|:--|:--|
+| 🧭 **Hermes** | Orchestrator | Monitors CI/CD, reads failure logs, issues fix instructions |
+| 🛠️ **OpenClaw** | Builder | Executes fixes, writes/patches code, reports back |
 
-All activity is streamed to **Slack**, so the whole loop is observable in real time.
+Every decision and status update flows through **Slack**, making the entire loop observable in real time.
 
 ---
 
 ## 🏗️ Architecture
 
-GitHub Actions (CI)
-│
-▼
-┌─────────┐      instructions      ┌───────────┐
-│ Hermes  │ ───────────────────►   │ OpenClaw  │
-│(orchestr│                        │ (builder) │
-│  -ator) │ ◄───────────────────   │           │
-└────┬────┘      results/status    └───────────┘
-│
-▼
-Slack (#agent-main / #agent-monitor)
+<div align="center">
+
+```
+             ┌────────────────────┐
+             │  GitHub Actions CI │
+             └─────────┬──────────┘
+                        │ status
+                        ▼
+                 ┌─────────────┐
+                 │   Hermes    │◄──────────┐
+                 │(Orchestrator│            │ results
+                 └──────┬──────┘            │
+                        │ instructions      │
+                        ▼                   │
+                 ┌─────────────┐            │
+                 │  OpenClaw   │────────────┘
+                 │  (Builder)  │
+                 └─────────────┘
+                        │
+                        ▼
+              💬 Slack (#agent-main)
+```
+
+</div>
 
 ---
 
 ## ✨ Features
 
-- 🔍 **CI Monitoring** — Hermes polls GitHub Actions and detects pass/fail status
-- 🩹 **Self-Healing Loop** — On failure, Hermes reads error logs and delegates a fix to OpenClaw
-- 💬 **Slack Integration** — Live updates, escalations, and human-in-the-loop mentions
-- ♻️ **Retry Policy** — Configurable auto-retry attempts before escalating to a human
-- 📝 **Decision Logging** — All agent decisions logged to `docs/decisions.md`
+- 🔍 **CI Monitoring** — polls GitHub Actions, detects pass/fail in real time
+- 🩹 **Self-Healing Loop** — reads error logs and delegates fixes automatically
+- 💬 **Slack Integration** — live updates, escalations, human-in-the-loop mentions
+- ♻️ **Retry Policy** — configurable auto-retries before escalating to a human
+- 📝 **Decision Logging** — every agent decision logged to `docs/decisions.md`
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Language:** Python
-- **CI/CD:** GitHub Actions
-- **Messaging:** Slack SDK
-- **AI:** Anthropic API
-- **Config:** JSON + `.env`
-- **Testing:** Pytest
+<div align="center">
+
+| Category | Tools |
+|:--|:--|
+| Language | Python |
+| CI/CD | GitHub Actions |
+| Messaging | Slack SDK |
+| AI Engine | Anthropic API |
+| Config | JSON + `.env` |
+| Testing | Pytest |
+
+</div>
 
 ---
 
 ## 📁 Project Structure
 
+```
 MindMesh-AI/
-├── .github/workflows/     # CI pipeline (ci.yml)
-├── config/                 # Agent configs (Hermes, OpenClaw)
-├── scripts/                 # Agent logic scripts
+├── .github/workflows/    # CI pipeline (ci.yml)
+├── config/                # Agent configs (Hermes, OpenClaw)
+├── scripts/                # Agent logic scripts
 ├── tests/                   # Test suite
-├── docs/                    # Documentation & decision logs
+├── docs/                     # Documentation & decision logs
 ├── requirements.txt
-└── .env                     # Secrets (not committed)
+└── .env                      # Secrets (not committed)
+```
 
 ---
 
 ## ⚙️ Setup & Installation
 
-1. **Clone the repo**
+**1. Clone the repo**
 ```bash
-   git clone https://github.com/paridhiagra/MindMesh-AI.git
-   cd MindMesh-AI
+git clone https://github.com/paridhiagra/MindMesh-AI.git
+cd MindMesh-AI
 ```
 
-2. **Create a virtual environment**
+**2. Create a virtual environment**
 ```bash
-   python -m venv venv
-   venv\Scripts\activate      # Windows
+python -m venv venv
+venv\Scripts\activate
 ```
 
-3. **Install dependencies**
+**3. Install dependencies**
 ```bash
-   pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
-4. **Configure environment variables**
-   Create a `.env` file in the root with:
+**4. Configure environment variables**
 
-    SLACK_BOT_TOKEN=xoxb-your-token
-    GITHUB_TOKEN=github_pat-your-token
-    SLACK_CHANNEL_AGENT_MAIN=#agent-main
-    SLACK_CHANNEL_AGENT_CODE=#agent-code
-    SLACK_CHANNEL_AGENT_MONITOR=#agent-monitor
+Create a `.env` file in the root:
+
+```
+SLACK_BOT_TOKEN=xoxb-your-token
+GITHUB_TOKEN=github_pat-your-token
+SLACK_CHANNEL_AGENT_MAIN=#agent-main
+SLACK_CHANNEL_AGENT_CODE=#agent-code
+SLACK_CHANNEL_AGENT_MONITOR=#agent-monitor
+```
 
 ---
 
@@ -114,14 +146,16 @@ pytest tests/ -v
 
 - [x] Project scaffolding & config
 - [x] GitHub Actions CI pipeline
-- [x] Hermes: GitHub API connection
-- [ ] Hermes: Failure log analysis
-- [ ] OpenClaw: Automated fix generation
+- [x] Hermes → GitHub API connection
+- [ ] Hermes → Failure log analysis
+- [ ] OpenClaw → Automated fix generation
 - [ ] Full self-healing loop (detect → diagnose → fix → verify)
 - [ ] Slack bi-directional control
 
 ---
 
-## 📄 License
+<div align="center">
 
-MIT
+**Made with 🧩 by [paridhiagra](https://github.com/paridhiagra)**
+
+</div>

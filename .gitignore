@@ -3,3 +3,4 @@ __pycache__/
 *.pyc
 config/hermes_config.json
 config/openclaw_config.json
+.env
